@@ -1,13 +1,21 @@
-import { Typography, TextField, Grid } from "@mui/material";
+import { useState, React } from "react";
+
+import { Typography, TextField, Grid, Button } from "@mui/material";
 import { muistyled } from "@mui/styles";
 import { Box } from "@mui/system";
-import React from "react";
+
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
+import SaveIcon from "@mui/icons-material/Save";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore";
+
 import styled from "styled-components";
+
+import { useForm, Controller } from "react-hook-form";
 
 const InputBox = styled.div`
   width: 100%;
@@ -23,89 +31,147 @@ const InputItem = styled.div`
 `;
 
 const ClientInput = () => {
+  const { register, handleSubmit, reset, setValue, control } = useForm();
+
+  const onSubmit = (data) => alert(JSON.stringify(data));
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
-        <Typography textAlign="left" variant="h6" mb={5}>
+      <Box sx={{ display: "flex", flexDirection: "column", p: 3 }}>
+        <Typography textAlign="left" variant="h5" mb={5} ml={3}>
           고객사 등록
         </Typography>
       </Box>
-      <InputBox>
-        <InputItem>
-          <Typography variant="body2" width={150} mr={3}>
-            회사명
-          </Typography>
-          <TextField size="small" sx={{ width: "50%" }}></TextField>
-          <Typography
-            variant="body2"
-            width={150}
-            ml={1}
-            display={{ xs: "none", sm: "none", md: "block" }}
-          >
-            (주)로 바꾸지마.
-          </Typography>
-        </InputItem>
-        <InputItem>
-          <Typography variant="body2" width={150} mr={3}>
-            담당자
-          </Typography>
-          <TextField size="small" sx={{ width: "50%" }}></TextField>
-          <Typography
-            variant="body2"
-            width={150}
-            ml={1}
-            display={{ xs: "none", sm: "none", md: "block" }}
-          >
-            직급 포함하지마.
-          </Typography>
-        </InputItem>
-        <InputItem>
-          <Typography variant="body2" width={150} mr={3}>
-            연락처
-          </Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputBox>
+          <InputItem>
+            <Typography variant="body2" width={150} mr={3}>
+              회사명
+            </Typography>
+            <TextField
+              size="small"
+              sx={{ width: "50%" }}
+              {...register("compName", { required: true, maxLength: 50 })}
+            ></TextField>
+            <Typography
+              variant="body2"
+              width={150}
+              ml={1}
+              display={{ xs: "none", sm: "none", md: "block" }}
+            >
+              (주)로 바꾸지마.
+            </Typography>
+          </InputItem>
+          <InputItem>
+            <Typography variant="body2" width={150} mr={3}>
+              담당자
+            </Typography>
+            <TextField
+              size="small"
+              sx={{ width: "50%" }}
+              {...register("clientName", { required: true, maxLength: 50 })}
+            ></TextField>
+            <Typography
+              variant="body2"
+              width={150}
+              ml={1}
+              display={{ xs: "none", sm: "none", md: "block" }}
+            >
+              직급 포함하지마.
+            </Typography>
+          </InputItem>
+          <InputItem>
+            <Typography variant="body2" width={150} mr={3}>
+              연락처
+            </Typography>
 
-          <TextField
-            size="small"
-            sx={{ width: "20%", marginRight: 1 }}
-            label="대표번호"
-          ></TextField>
-          <TextField
-            size="small"
-            sx={{ width: "20%", marginRight: 1 }}
-            label="모바일"
-          ></TextField>
-          <TextField
-            size="small"
-            sx={{ width: "20%", marginRight: 1 }}
-            label="이메일"
-          ></TextField>
-        </InputItem>
-        <InputItem>
-          <Typography variant="body2" width={150} mr={3}>
-            거래구분
-          </Typography>
-          <FormControl component="fieldset">
-            <RadioGroup row aria-label="gender" name="row-radio-buttons-group">
-              <FormControlLabel
-                value="sellClient"
-                control={<Radio />}
-                label="매출"
-              />
+            <TextField
+              size="small"
+              sx={{ width: "20%", marginRight: 1 }}
+              label="대표번호"
+              {...register("telNumber", { required: true, maxLength: 20 })}
+            ></TextField>
+            <TextField
+              size="small"
+              sx={{ width: "20%", marginRight: 1 }}
+              label="모바일"
+              {...register("mobileNumber", { required: true, maxLength: 20 })}
+            ></TextField>
+            <TextField
+              size="small"
+              sx={{ width: "20%", marginRight: 1 }}
+              label="이메일"
+              {...register("clientEmail", { required: true, maxLength: 50 })}
+            ></TextField>
+          </InputItem>
+          <InputItem>
+            <Typography variant="body2" width={150} mr={3}>
+              거래구분
+            </Typography>
 
-              <FormControlLabel
-                value="buyClient"
-                control={<Radio />}
-                label="매입"
-              />
-              <FormControlLabel
-                value="bothClient"
-                control={<Radio />}
-                label="둘다"
-              />
-            </RadioGroup>
-          </FormControl>
-        </InputItem>
-      </InputBox>
+            <Controller
+              render={({ field }) => (
+                <RadioGroup row aria-label="gender" {...field}>
+                  <FormControlLabel
+                    value="buyer"
+                    control={<Radio />}
+                    label="매출처"
+                  />
+                  <FormControlLabel
+                    value="seller"
+                    control={<Radio />}
+                    label="매입처"
+                  />
+                  <FormControlLabel
+                    value="both"
+                    control={<Radio />}
+                    label="모두"
+                  />
+                </RadioGroup>
+              )}
+              name="clientType"
+              control={control}
+            />
+          </InputItem>
+          <InputItem style={{ justifyContent: "center", padding: "0px" }}>
+            <Button
+              variant="contained"
+              sx={{ width: 150, height: 50, fontSize: 15, p: 2, mr: 5 }}
+              startIcon={<AddCircleIcon />}
+              type={"submit"}
+            >
+              추가후 계속
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{ width: 150, height: 50, fontSize: 15, p: 2, mr: 5 }}
+              startIcon={<SaveIcon />}
+            >
+              저장후 완료
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{ width: 150, height: 50, fontSize: 15, p: 2, mr: 5 }}
+              startIcon={<SettingsBackupRestoreIcon />}
+              color="warning"
+              onClick={() =>
+                reset({
+                  compName: "",
+                  clientName: "",
+                  telNumber: "",
+                  mobileNumber: "",
+                  clientEmail: "",
+                  clientType: {
+                    buyer: "selected",
+                  },
+                })
+              }
+            >
+              초기화
+            </Button>
+          </InputItem>
+        </InputBox>
+      </form>
     </Box>
   );
 };

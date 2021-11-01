@@ -5,6 +5,8 @@ import Grid from "@mui/material/Grid";
 import Header from "../components/Header";
 import LeftMenu from "../components/LeftMenu";
 import ClientInput from "../components/ClientInput";
+import Info from "../components/Info";
+import ClientList from "../components/ClientList";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -35,15 +37,15 @@ const Home = () => {
           md={3}
           lg={2}
           display={{ xs: "none", md: "block" }}
-          marginTop={{ xs: 0, md: 5 }}
+          marginTop={{ xs: 0, md: 6 }}
         >
           <Item>
             <LeftMenu />
           </Item>
         </Grid>
-        <Grid item xs={12} md={9} lg={8} marginTop={{ xs: 0, md: 5 }}>
+        <Grid item xs={12} md={9} lg={8} marginTop={{ xs: 0, md: 6 }}>
           <Item>
-            <ClientInput />
+            <ClientList />
           </Item>
         </Grid>
         <Grid
@@ -52,9 +54,11 @@ const Home = () => {
           sm={0}
           md={0}
           display={{ xs: "none", md: "none", lg: "block" }}
-          marginTop={{ xs: 0, md: 5 }}
+          marginTop={{ xs: 0, md: 6 }}
         >
-          <Item>Info</Item>
+          <Item>
+            <Info />
+          </Item>
         </Grid>
       </Grid>
     </Box>
